@@ -1,0 +1,14 @@
+version: 2
+
+sources:
+  - name: odoo
+    schema: odoo
+    description: "Copy of the production Odoo sales database (synthetic). Read-only."
+    tables:
+      - name: sale_order
+      - name: sale_order_line
+      - name: res_partner
+      - name: res_users
+      - name: product_template
+      - name: product_product
+      - name: product_category

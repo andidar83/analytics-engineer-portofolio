@@ -1,0 +1,9 @@
+# Python environment and editor settings
+.venv/
+.idea/
+
+# dbt logs written when running from the root
+logs/
+
+# Never commit the provided dataset
+*.csv
