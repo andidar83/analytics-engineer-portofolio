@@ -8,7 +8,7 @@ renamed as (
 	, nullif(trim(name),'') as customer_name
 	, nullif(trim(city),'') as city
 	, nullif(trim(country),'') as country
-	, customer_rank_active as is_active_curtomer
+	, customer_rank_active as is_active_customer
 	, user_id as salesperson_id
 	from source
 )
