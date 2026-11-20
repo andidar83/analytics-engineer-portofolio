@@ -20,7 +20,7 @@ Three layers, as in the brief. Everything is built in the `analytics` schema; th
 | Layer | Folder | Prefix | Materialization | Purpose |
 |---|---|---|---|---|
 | Staging | `models/staging` | `stg_odoo__` | view | One model per source table: rename, cast, light cleaning |
-| Facts & dimensions | `models/facts`, `models/dimensions` | `fct_`, `dim_` | table | Business logic: what counts as a sale, revenue, cost, margin |
+| Facts & dimensions | `models/facts`, `models/dimensions` | `fact_`, `dim_` | table | Business logic: what counts as a sale, revenue, cost, margin |
 | Reports | `models/reports` | `rpt_` | table | One business question per model (the mart) |
 
 Staging models are views (cheap, always current). Facts, dimensions and reports are tables (queried directly, stable between builds).
@@ -82,7 +82,10 @@ The data is internally consistent: links, line and order arithmetic, salesperson
 - Line revenue = `price_subtotal` (after discount, excluding tax).
 - Unit cost = `product_template.standard_price`. Assumption: this is the current cost, not the cost at the time of sale (Odoo does not store historical cost on the order line).
 - Dates are reported in Jakarta time (WIB).
-- _(to do: facts, dimensions, report)_
+- `fact_order_lines` keeps every order line (295), including cancelled ones, with an `is_valid_sale` flag. Revenue and margin are summed only where the flag is true; cancelled lines stay so the cancellation rate can be calculated from the same table.
+- Salesperson, customer, date and state on the fact come from the order header (the business record); cost comes from `dim_product`.
+- Reconciliation of the fact against the profiling results: 295 lines, 97 valid orders, valid revenue Rp 1,893,238,650 and cancelled value Rp 723,107,800, all matching. Valid gross margin is Rp 432,553,650 (22.8 % of revenue).
+- _(to do: report)_
 
 ## Metric definitions
 _(to do)_
