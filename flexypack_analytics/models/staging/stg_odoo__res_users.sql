@@ -1,6 +1,18 @@
-select
-    id      as user_id,
-    name    as user_name,
-    login   as user_login,
-    active  as is_active
-from {{ source('odoo', 'res_users') }}
+with source as(
+	select * from {{ source('odoo', 'res_users') }}
+),
+
+renamed as (
+	select
+	id as salesperson_id
+	, nullif(trim(name),'') as salesperson_name
+	, nullif(trim(login),'') as salesperson_email_login
+	, active as is_active
+	from source
+)
+
+select * from renamed
+
+
+
+
