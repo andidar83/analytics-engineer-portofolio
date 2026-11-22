@@ -47,6 +47,8 @@ dbt build     # builds all models and runs all tests
 ```
 Expected result: should be about 12 models, and 43 tests.
 
+If Windows blocks `dbt.exe` ("An Application Control policy has blocked this file", from Smart App Control), run dbt through Python instead: `python -c "from dbt.cli.main import cli; cli()" build`.
+
 `flexypack_analytics/profiles.yml` holds the connection to the provided database (localhost:5433, user and password `analyst`).  With real credentials I would not commit the pass and use environment variables instead.
 
 **Optional:**
