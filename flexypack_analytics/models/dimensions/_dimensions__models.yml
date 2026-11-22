@@ -1,0 +1,45 @@
+version: 2
+
+models:
+  - name: dim_salesperson
+    description: "One row per salesperson. All Odoo users are salespeople in this dataset."
+    columns:
+      - name: salesperson_id
+        description: "Salesperson id (Odoo res_users.id)."
+        data_tests: [unique, not_null]
+      - name: salesperson_name
+        description: "Salesperson full name."
+        data_tests: [not_null]
+      - name: is_active
+        description: "False if the user is archived in Odoo."
+
+  - name: dim_customer
+    description: "One row per customer."
+    columns:
+      - name: customer_id
+        description: "Customer id (Odoo res_partner.id)."
+        data_tests: [unique, not_null]
+      - name: salesperson_id
+        description: "Salesperson assigned to the customer (account owner). Matches the order salesperson for every order in this dataset."
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_salesperson')
+                field: salesperson_id
+
+  - name: dim_product
+    description: "One row per product variant, with template details (name, list price, unit cost) and category."
+    columns:
+      - name: product_id
+        description: "Product variant id (Odoo product_product.id); the id used on order lines."
+        data_tests: [unique, not_null]
+      - name: product_category_id
+        description: "Category id; one of 4 flat categories."
+        data_tests: [not_null]
+      - name: list_price_idr
+        description: "Catalog selling price per unit, IDR."
+      - name: standard_price_idr
+        description: "Unit cost, IDR (Odoo standard_price). Current cost, not the cost at the time of sale."
+        data_tests: [not_null]
+      - name: is_active
+        description: "True only if both the variant and its template are active."

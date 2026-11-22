@@ -1,0 +1,12 @@
+flexypack_analytics:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: localhost
+      port: 5433
+      user: analyst
+      pass: analyst
+      dbname: takehome
+      schema: analytics
+      threads: 4

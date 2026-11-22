@@ -1,0 +1,57 @@
+version: 2
+
+models:
+  - name: fact_order_lines
+    description: >
+      One row per order line, including cancelled orders. Revenue, cost and margin are calculated here once,
+      so every report uses the same definitions. Filter on is_valid_sale for sales figures.
+    columns:
+      - name: order_line_id
+        description: "Order line id (Odoo sale_order_line.id). Grain of the table."
+        data_tests: [unique, not_null]
+      - name: order_id
+        description: "Order the line belongs to."
+        data_tests: [not_null]
+      - name: salesperson_id
+        description: "Salesperson credited with the sale (from the order header)."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_salesperson')
+                field: salesperson_id
+      - name: customer_id
+        description: "Customer on the order."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_customer')
+                field: customer_id
+      - name: product_id
+        description: "Product variant sold."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_product')
+                field: product_id
+      - name: order_date_wib
+        description: "Order date in Jakarta time (UTC+7)."
+      - name: order_state
+        description: "Odoo order state: sale, done or cancel."
+      - name: is_valid_sale
+        description: "True for confirmed orders (state sale or done); false for cancelled."
+        data_tests: [not_null]
+      - name: gross_amount_idr
+        description: "Quantity x unit price, before discount, IDR."
+      - name: discount_amount_idr
+        description: "Discount given on the line, IDR (gross amount minus revenue)."
+      - name: revenue_idr
+        description: "Line revenue after discount, excluding tax, IDR (Odoo price_subtotal)."
+      - name: unit_cost_idr
+        description: "Unit cost from the product (current standard price), IDR."
+      - name: cost_idr
+        description: "Quantity x unit cost, IDR."
+      - name: gross_margin_idr
+        description: "Revenue minus cost, IDR. Negative means the line was sold below cost."

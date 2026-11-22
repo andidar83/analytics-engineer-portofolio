@@ -7,3 +7,6 @@ logs/
 
 # Never commit the provided dataset
 *.csv
+
+# dbt anonymous usage id
+.user.yml

@@ -1,0 +1,46 @@
+version: 2
+
+models:
+  - name: rpt_salesperson_performance
+    description: >
+      Sales team performance for the period in the data (September 2026), one row per salesperson.
+      All 10 salespeople appear, even with no sales. Only confirmed orders (state sale or done) count
+      as sales; cancelled orders are reported separately. Amounts are in IDR, excluding tax.
+    columns:
+      - name: salesperson_id
+        description: "Salesperson id (Odoo res_users.id). One row per salesperson."
+        data_tests: [unique, not_null]
+      - name: salesperson_name
+        description: "Salesperson full name."
+        data_tests: [not_null]
+      - name: revenue_idr
+        description: "Revenue: sum of line amounts after discount, excluding tax, on confirmed orders."
+        data_tests: [not_null]
+      - name: gross_margin_idr
+        description: "Gross margin: revenue minus product cost (quantity x current unit cost) on confirmed orders."
+      - name: gross_margin_pct
+        description: "Gross margin as % of revenue."
+      - name: margin_before_discount_pct
+        description: >
+          Margin % the same products would have earned at list price (no discount). Depends only on the
+          product mix; comparing it with gross_margin_pct shows how much margin was given away as discount.
+      - name: avg_discount_pct
+        description: >
+          Weighted average discount: total discount IDR / total value before discount, on confirmed orders.
+          Weighted so large lines count more than small ones.
+      - name: orders
+        description: "Number of confirmed orders (distinct orders in state sale or done)."
+      - name: avg_order_value_idr
+        description: "Average order value: revenue / number of confirmed orders."
+      - name: categories_sold
+        description: "Category breadth: number of distinct product categories sold on confirmed orders (out of 4)."
+      - name: customers
+        description: "Number of distinct customers with at least one confirmed order."
+      - name: customer_cities
+        description: "Number of distinct customer cities with at least one confirmed order."
+      - name: cancelled_orders
+        description: "Number of cancelled orders."
+      - name: cancelled_value_idr
+        description: "Value of cancelled orders, after discount, excluding tax. Not included in revenue."
+      - name: cancellation_rate_pct
+        description: "Cancelled orders as % of all orders (confirmed + cancelled)."

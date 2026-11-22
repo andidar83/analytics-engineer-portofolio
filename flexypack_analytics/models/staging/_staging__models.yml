@@ -1,0 +1,57 @@
+version: 2
+
+models:
+  - name: stg_odoo__sale_order
+    description: "One row per sales order (Odoo sale_order), renamed, with timestamps converted from UTC to Jakarta time."
+    columns:
+      - name: order_id
+        data_tests: [unique, not_null]
+      - name: order_state
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['sale', 'done', 'cancel']
+
+  - name: stg_odoo__sale_order_line
+    description: "One row per order line (Odoo sale_order_line)."
+    columns:
+      - name: order_line_id
+        data_tests: [unique, not_null]
+      - name: order_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_odoo__sale_order')
+                field: order_id
+
+  - name: stg_odoo__res_partner
+    description: "One row per customer (Odoo res_partner)."
+    columns:
+      - name: customer_id
+        data_tests: [unique, not_null]
+
+  - name: stg_odoo__res_users
+    description: "One row per salesperson (Odoo res_users)."
+    columns:
+      - name: salesperson_id
+        data_tests: [unique, not_null]
+
+  - name: stg_odoo__product_product
+    description: "One row per product variant (Odoo product_product)."
+    columns:
+      - name: product_id
+        data_tests: [unique, not_null]
+
+  - name: stg_odoo__product_template
+    description: "One row per product template (Odoo product_template); holds prices, cost and category."
+    columns:
+      - name: product_template_id
+        data_tests: [unique, not_null]
+
+  - name: stg_odoo__product_category
+    description: "One row per product category (Odoo product_category)."
+    columns:
+      - name: product_category_id
+        data_tests: [unique, not_null]
